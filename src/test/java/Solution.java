@@ -21,6 +21,8 @@ public class Solution {
    // private char currentCurrency;
     private static final String DRV_CHROME_V80_Linux = "src/main/resources/chromedriver80";
     private static final String DRV_CHROME_V81_Linux = "src/main/resources/chromedriver81";
+    private static final String DRV_CHROME_V80_Windows = "src/main/resources/chromedriver80.exe";
+    private static final String DRV_CHROME_V81_Windows = "src/main/resources/chromedriver81.exe";
 
     private static final String MAIN_PAGE = "http://prestashop-automation.qatestlab.com.ua/ru";
     private static final String SEARCH_KEYWORDS = "dress";
@@ -33,13 +35,13 @@ public class Solution {
     @BeforeTest
 
     public void start() {
-        System.setProperty("webdriver.chrome.driver", DRV_CHROME_V80_Linux );
+        System.setProperty("webdriver.chrome.driver", DRV_CHROME_V80_Windows );
         driver = new ChromeDriver();
+        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         actions = new Actions(driver);
         wait = new WebDriverWait(driver, 10);
 
         driver.get(MAIN_PAGE);
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         assertTrue(driver.getCurrentUrl().contains("http://prestashop-automation.qatestlab.com.ua"));
     }
 

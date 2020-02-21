@@ -4,6 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.testng.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +72,7 @@ class Actions {
         }
 
     }
+
     public char getActualCurrency()
     {
         try {
@@ -87,6 +91,7 @@ class Actions {
         }
 
     }
+
     protected void findProducts()
     {
         Solution.wait.until(ExpectedConditions.elementToBeClickable(By.className("thumbnail-container")));
@@ -94,6 +99,7 @@ class Actions {
         productList = priceList;
         foundProductPositions = productList.size();
     }
+
     protected void isProductsCurrencyActual()
     {
         if (currentCurrency != '\u0024'| currentCurrency != '\u20AC'| currentCurrency != '\u20B4')currentCurrency = getActualCurrency();
@@ -104,6 +110,7 @@ class Actions {
 
        assertTrue(foundElements.size() == foundProductPositions);
     }
+
     protected void sortingCheck() {
         findProducts();
         ArrayList<WebElement> products = new ArrayList<WebElement>();
@@ -122,11 +129,12 @@ class Actions {
         System.out.println("product #"+newList.size()+" costs "+ Float.valueOf(newList.get(products.size()-1).getText().replace(currentCurrency,' ').replace(',','.')));
 
     }
+
     void discountCheck()
     {
-        ArrayList<WebElement> products = new ArrayList<WebElement>();
+        ArrayList<WebElement> products = new ArrayList<WebElement>(driver.findElements(By.cssSelector("article.product-miniature.js-product-miniature")));
         ArrayList<Product> positions = new ArrayList<Product>();
-        products.addAll(driver.findElements(By.cssSelector("article.product-miniature.js-product-miniature")));
+        //products.addAll(driver.findElements(By.cssSelector("article.product-miniature.js-product-miniature")));
         for (int i = 0; i < products.size(); i++) {
             positions.add(new Product(products.get(i), getActualCurrency()));
         }
@@ -139,6 +147,20 @@ class Actions {
             }
         }
     }
+
+    protected void createFile() {
+        try {
+            File logFile = new File("log.txt");
+            if (logFile.createNewFile()) {
+                System.out.println("Created: " + logFile.getName()+ "\nAt: " + logFile.getPath());
+            }
+        }
+        catch (IOException e) {
+            System.out.println("En error occurred.");
+            e.printStackTrace();
+        }
+    }
+
 
 }
 

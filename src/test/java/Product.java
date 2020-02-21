@@ -23,8 +23,8 @@ class Product {
 
     }
     private void fillNameAndId() {
-        productName = rel.findElement(By.className("h3 product-title")).getText();
-        innerId = Integer.parseInt(rel.findElement(By.className("h3 product-title")).getAttribute("data-id-product"));
+        productName = rel.findElement(By.cssSelector("h1.h3.product-title")).getText();
+        innerId = Integer.parseInt(rel.getAttribute("data-id-product"));
     }
     public void consoleOutElement() {
         if (isDiscounted)
