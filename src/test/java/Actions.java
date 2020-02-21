@@ -134,7 +134,6 @@ class Actions {
     {
         ArrayList<WebElement> products = new ArrayList<WebElement>(driver.findElements(By.cssSelector("article.product-miniature.js-product-miniature")));
         ArrayList<Product> positions = new ArrayList<Product>();
-        //products.addAll(driver.findElements(By.cssSelector("article.product-miniature.js-product-miniature")));
         for (int i = 0; i < products.size(); i++) {
             positions.add(new Product(products.get(i), getActualCurrency()));
         }
