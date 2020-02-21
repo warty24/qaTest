@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 
@@ -17,20 +18,22 @@ public class Solution {
     static WebDriverWait wait;
     Actions actions;
 
-    private char currentCurrency;
+   // private char currentCurrency;
+    private static final String DRV_CHROME_V80_Linux = "src/main/resources/chromedriver80";
+    private static final String DRV_CHROME_V81_Linux = "src/main/resources/chromedriver81";
 
-    public static final String MAIN_PAGE = "http://prestashop-automation.qatestlab.com.ua/ru";
-    public static final String SEARCH_KEYWORDS = "dress";
-    public static final String POPULAR_PRODUCT_SECTION = "/html/body/main/section/div/div/section/section/section/div";
-    public static final String FOUND_PRODUCT_POSITIONS = "/html/body/main/section/div/div/section/section/div[1]/div/div[1]/p";
-    public static final String SEARCH_FIELD = "/html/body/main/header/div/div/div[1]/div[2]/div/div[2]/form/input[2]";
-    public static final String SORT_BUTTON = "//*[@id=\"js-product-list-top\"]/div[2]/div/div/a";
-    public static final String HIGH_TO_LOW = "/html/body/main/section/div/div/section/section/div[1]/div/div[2]/div/div/div/a[5]";
+    private static final String MAIN_PAGE = "http://prestashop-automation.qatestlab.com.ua/ru";
+    private static final String SEARCH_KEYWORDS = "dress";
+    private static final String FOUND_PRODUCT_POSITIONS = "/html/body/main/section/div/div/section/section/div[1]/div/div[1]/p";
+    private static final String SEARCH_FIELD = "/html/body/main/header/div/div/div[1]/div[2]/div/div[2]/form/input[2]";
+    private static final String SORT_BUTTON = "//*[@id=\"js-product-list-top\"]/div[2]/div/div/a";
+    private static final String HIGH_TO_LOW = "/html/body/main/section/div/div/section/section/div[1]/div/div[2]/div/div/div/a[5]";
 
 
     @BeforeTest
 
     public void start() {
+        System.setProperty("webdriver.chrome.driver", DRV_CHROME_V80_Linux );
         driver = new ChromeDriver();
         actions = new Actions(driver);
         wait = new WebDriverWait(driver, 10);
@@ -52,7 +55,8 @@ public class Solution {
     @Test
     public void setPriseToUSD3() {
         actions.changeCurrencyTo("USD");
-        assertTrue(actions.getActualCurrency()== '\u0024');
+        assertEquals(actions.getActualCurrency(),'\u0024');
+        System.out.println("Currency changed to \u0024");
     }
     @Test
     public void searchByKeywords4() {
@@ -61,13 +65,13 @@ public class Solution {
         element.sendKeys(SEARCH_KEYWORDS);
         element.submit();
         assertTrue(driver.getCurrentUrl().contains("search?"));
+        System.out.println("Search for "+ SEARCH_KEYWORDS + " Success!");
     }
     @Test
     public void searchAudition5() {
         searchByKeywords4();
         actions.findProducts();
         System.out.println(driver.findElement(By.xpath(FOUND_PRODUCT_POSITIONS)).getText());
-        System.out.println(actions.foundProductPositions);
         assertTrue(driver.findElement(By.xpath(FOUND_PRODUCT_POSITIONS)).getText().contains("Товаров: "+ actions.foundProductPositions));
     }
     @Test
@@ -77,9 +81,9 @@ public class Solution {
     @Test
     public void productSorting7() {
         searchByKeywords4();
-    driver.findElement(By.xpath(SORT_BUTTON)).click();
-    driver.findElement(By.xpath(HIGH_TO_LOW)).click();
-        System.out.println("Sorted!");
+        driver.findElement(By.xpath(SORT_BUTTON)).click();
+        driver.findElement(By.xpath(HIGH_TO_LOW)).click();
+        System.out.println("Sorted! (high to low)");
     }
     @Test
     public void sortingCheck8() {
@@ -89,8 +93,10 @@ public class Solution {
     @Test void discountCheck10() {
         actions.discountCheck();
     }
+
+
     @AfterTest
-    public void thatsAllKiddies() {
+    public void finish() {
        //driver.close();
     }
 
